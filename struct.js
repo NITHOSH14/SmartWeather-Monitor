@@ -2,24 +2,38 @@ document.addEventListener("DOMContentLoaded", function () {
     async function getWeather() {
         const city = document.getElementById("cityInput").value.trim();
         const apiKey = "01343783ad59a27088a3380a7b9ccc86"; // Your API Key
-        const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}`;
+
+        // Regular expression to allow only alphabetic city names
+        const cityRegex = /^[A-Za-z\s]+$/;
 
         if (!city) {
             alert("Please enter a city name.");
             return;
         }
 
-        try {
-            const response = await fetch(url);
-            const data = await response.json();
-            console.log(data); // Log API response for debugging
+        if (!cityRegex.test(city)) {
+            alert("Invalid input! Please enter a valid city name.");
+            return;
+        }
 
-            if (data.cod !== 200) {  // If API returns an error
-                alert(`Error: ${data.message}`);
+        // First, check if the city exists by making a request to OpenWeatherMap
+        const checkUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`;
+        
+        try {
+            const checkResponse = await fetch(checkUrl);
+            const checkData = await checkResponse.json();
+
+            if (checkData.cod !== 200) {
+                alert("Invalid city! Please enter a valid city name.");
                 return;
             }
 
-            // Update the correct elements
+            // Now fetch weather data if the city exists
+            const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}`;
+            const response = await fetch(url);
+            const data = await response.json();
+
+            // Update the weather details on the page
             document.getElementById("cityName").innerText = `Weather in ${data.name}`;
             document.getElementById("temperature").innerText = `Temperature: ${data.main.temp}°C`;
             document.getElementById("weatherCondition").innerText = `Description: ${data.weather[0].description}`;
