@@ -1,9 +1,19 @@
 document.addEventListener("DOMContentLoaded", function () { 
     async function getWeather() {
         const city = document.getElementById("cityInput").value.trim();
-        const apiKey = "01343783ad59a27088a3380a7b9ccc86"; // Your API Key
+        const apiKey = "01343783ad59a27088a3380a7b9ccc86"; 
 
-        // Regular expression to allow only alphabetic city names
+         cityInput.addEventListener("keydown", function(event){
+             if(event.key==="Enter"){
+                 event.preventDefault();
+                 getweather();
+             }
+         });
+
+            async function getWeather() {
+        const city = cityInput.value.trim();
+        const apiKey = "01343783ad59a27088a3380a7b9ccc86";
+                
         const cityRegex = /^[A-Za-z\s]+$/;
 
         if (!city) {
@@ -16,7 +26,6 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        // First, check if the city exists by making a request to OpenWeatherMap
         const checkUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`;
         
         try {
@@ -28,7 +37,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 return;
             }
 
-            // Now fetch weather data if the city exists
+    
             const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}`;
             const response = await fetch(url);
             const data = await response.json();
