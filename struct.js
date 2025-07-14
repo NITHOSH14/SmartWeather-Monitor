@@ -1,20 +1,18 @@
 document.addEventListener("DOMContentLoaded", function () { 
+    const cityInput = document.getElementById("cityInput");
+
+  
+    cityInput.addEventListener("keydown", function(event) {
+        console.log("Key pressed:", event.key);
+        if (event.key === "Enter") {
+            event.preventDefault();
+            getWeather(); 
+        }
+    });
+
     async function getWeather() {
-        const city = document.getElementById("cityInput").value.trim();
-        const apiKey = "01343783ad59a27088a3380a7b9ccc86"; 
-
-         cityInput.addEventListener("keydown", function(event){
-                 console.log("Key pressed:", event.key);
-             if(event.key==="Enter"){
-                 event.preventDefault();
-                 getweather();
-             }
-         });
-
-            async function getWeather() {
         const city = cityInput.value.trim();
         const apiKey = "01343783ad59a27088a3380a7b9ccc86";
-                
         const cityRegex = /^[A-Za-z\s]+$/;
 
         if (!city) {
@@ -38,12 +36,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 return;
             }
 
-    
             const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}`;
             const response = await fetch(url);
             const data = await response.json();
 
-            // Update the weather details on the page
             document.getElementById("cityName").innerText = `Weather in ${data.name}`;
             document.getElementById("temperature").innerText = `Temperature: ${data.main.temp}°C`;
             document.getElementById("weatherCondition").innerText = `Description: ${data.weather[0].description}`;
@@ -55,5 +51,5 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    window.getWeather = getWeather; // Ensure function is available globally
+    window.getWeather = getWeather;
 });
