@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const apiKey = "01343783ad59a27088a3380a7b9ccc86"; 
 
          cityInput.addEventListener("keydown", function(event){
+                 console.log("Key pressed:", event.key);
              if(event.key==="Enter"){
                  event.preventDefault();
                  getweather();
